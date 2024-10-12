@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Blog Post Cards with Styled Pagination</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* Full-page loader styles */
+        #loader {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #loader img {
+            width: 100px;
+            /* Adjust the size of the loading image */
+            height: auto;
+        }
+
+        /* Hides the main content until fully loaded */
+        #content {
+            display: none;
+        }
+
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+            background-color: #f8f9fa;
+        }
+
+        /* Placeholder image loader */
+        .image-placeholder {
+            position: relative;
+        }
+
+        .image-placeholder img.card-img-top {
+            display: none;
+        }
+
+        .image-placeholder .image-loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+        }
+
+        /* Pagination loader */
+        #paginationLoader {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #paginationLoader img {
+            width: 50px;
+            height: 50px;
+        }
+
+        #pagination {
+            margin-top: 30px;
+        }
+
+        .pagination {
+            display: inline-flex;
+            padding: 0;
+            margin: 0;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .pagination li {
+            list-style: none;
+        }
+
+        .pagination li a {
+            text-decoration: none;
+            padding: 10px 20px;
+            color: #333;
+            font-weight: 500;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            transition: all 0.3s ease;
+        }
+
+        .pagination li.active a {
+            background-color: #007bff;
+            color: #fff;
+            border-color: #007bff;
+        }
+
+        .pagination li a:hover:not(.active) {
+            background-color: #f8f9fa;
+        }
+
+        .pagination li:first-child a {
+            border-top-left-radius: 30px;
+            border-bottom-left-radius: 30px;
+        }
+
+        .pagination li:last-child a {
+            border-top-right-radius: 30px;
+            border-bottom-right-radius: 30px;
+        }
+
+        .page-info {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+    </style>
+</head>
+
+<body>
+    <section id="shopify-section-template--22464632684852__main" class="shopify-section spaced-section">
+        <div class="page-width">
+            <h1 class="main-page-title page-title h0">Free Consultation Form</h1>
+            <div class="rte">
+                <section class="contact_form">
+                    <h4>Free Consultation Form</h4>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-6 col-sm-6">
+                                <img src="https://cdn.shopify.com/s/files/1/0728/2081/8228/files/health-expert.jpg?v=1698045341"
+                                    loading="lazy" alt="Health Expert">
+                            </div>
+                            <div class="col-lg-6 col-sm-6">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <div class="formbody">
+                                            <form role="form" method="post"
+                                                action="https://sheopals.in/FreeConsultationForm/FreeConsultationFormmultiple.php"
+                                                data-gtm-form-interact-id="0">
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <label for="fname">First Name</label>
+                                                        <div class="form-group">
+                                                            <input id="fname" name="fname" required
+                                                                placeholder="First Name" class="form-control input-sm"
+                                                                type="text">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <label for="lname">Last Name</label>
+                                                        <div class="form-group">
+                                                            <input id="lname" name="lname" required
+                                                                placeholder="Last Name" class="form-control input-sm"
+                                                                type="text">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="mobile">Phone Number</label>
+                                                    <input id="mobile" name="mobile" required placeholder="Enter Mobile"
+                                                        pattern="[6789][0-9]{9}" maxlength="10"
+                                                        class="form-control only_number" type="text">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="email">E-mail</label>
+                                                    <input id="email" name="email" placeholder="Email"
+                                                        class="form-control input-sm" type="email">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="weight">Weight (In K.g)</label>
+                                                    <input id="weight" name="weight" required placeholder="Weight"
+                                                        class="form-control input-sm" type="number">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="height">Height</label>
+                                                    <input id="height" name="height" required placeholder="Height"
+                                                        class="form-control input-sm" type="number">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="age">Age</label>
+                                                    <input id="age" name="age" required placeholder="Age"
+                                                        class="form-control input-sm" type="number">
+                                                </div>
+                                                <h5>Health Issues (Select At least One) *</h5>
+
+                                                <div class="form-group">
+                                                    <label for="diabetes"><input value="diabetes" name="healthissues"
+                                                            id="diabetes" type="radio"> Diabetes</label>
+                                                </div>
+                                                <div class="diabetes box" style="display: none;">
+                                                    <div class="form-group">
+                                                        <label for="sugar">Mention Sugar Level</label>
+                                                        <input id="sugar" name="sugar" placeholder="Sugar Level"
+                                                            class="form-control input-sm" type="text">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="bp"><input value="bp" name="healthissues" id="bp"
+                                                            type="radio"> Blood-Pressure</label>
+                                                </div>
+                                                <div class="bp box" style="display: none;">
+                                                    <div class="form-group"><label for="highbp"><input value="highbp"
+                                                                name="bloodpressure1" id="highbp" type="checkbox">
+                                                            High</label></div>
+                                                    <div class="form-group"><label for="lowbp"><input value="lowbp"
+                                                                name="bloodpressure1" id="lowbp" type="checkbox">
+                                                            Low</label></div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="thyroid"><input value="thyroid" name="healthissues"
+                                                            id="thyroid" type="radio"> Thyroid</label>
+                                                </div>
+                                                <div class="thyroid box" style="display: none;">
+                                                    <div class="form-group"><label for="hyper"><input value="hyper"
+                                                                name="thyroid1" id="hyper" type="checkbox">
+                                                            Hyper</label>
+                                                    </div>
+                                                    <div class="form-group"><label for="hypo"><input value="hypo"
+                                                                name="thyroid1" id="hypo" type="checkbox"> Hypo</label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="energy"><input value="energy" name="healthissues"
+                                                            id="energy" type="radio"> Stamina</label>
+                                                </div>
+                                                <div class="energy box" style="display: none;">
+                                                    <div class="form-group"><label for="last"><input value="last"
+                                                                name="energy1" id="last" type="checkbox"> Long Lasting
+                                                            On
+                                                            Bed</label></div>
+                                                    <div class="form-group"><label for="ed"><input value="ed"
+                                                                name="energy1" id="ed" type="checkbox"> ED</label></div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="piles"><input value="piles" name="healthissues"
+                                                            id="piles" type="radio"> Piles</label>
+                                                </div>
+                                                <div class="Pilessss box" style="display: none;">
+                                                    <div class="form-group"><label for="internalpiles"><input
+                                                                value="internalpiles" name="piles1" id="internalpiles"
+                                                                type="checkbox"> Internal Piles</label></div>
+                                                    <div class="form-group"><label for="externalpiles"><input
+                                                                value="externalpiles" name="piles1" id="externalpiles"
+                                                                type="checkbox"> External Piles</label></div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="weightloss"><input value="weightloss"
+                                                            name="healthissues" id="weightloss" type="radio"> Weight
+                                                        Loss</label>
+                                                </div>
+                                                <div class="weightloss box" style="display: none;">
+                                                    <div class="form-group">
+                                                        <label for="weightgoal">How Much you Want To Lose</label>
+                                                        <input id="weightgoal" name="weightgoal"
+                                                            placeholder="Weight Loss Goal" class="form-control input-sm"
+                                                            type="text">
+                                                    </div>
+                                                </div>
+
+                                                <div>
+                                                    <input class="btn btn-infoo" value="Submit" name="submittt"
+                                                        type="submit">
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <style>
+                    .contact_form {
+                        width: 100%;
+                        display: inline-block;
+                        text-align: center;
+                        padding: 15px 0 30px;
+                        background: #f9f9f9;
+                    }
+
+                    .contact_form h4 {
+                        font-size: 30px;
+                        color: #333;
+                        margin: 5px 0 20px;
+                        font-weight: bold;
+                    }
+
+                    .contact_form h5 {
+                        font-size: 18px;
+                        color: #333;
+                        margin: 5px 0 20px;
+                        font-weight: bold;
+                    }
+
+                    .modal-content {
+                        border-radius: 20px;
+                        text-align: center;
+                        border: none !important;
+                        background: #fff;
+                    }
+
+                    .modal-body {
+                        padding: 20px;
+                    }
+
+                    input[type="text"],
+                    input[type="email"],
+                    input[type="number"] {
+                        border: none;
+                        border-radius: 5px;
+                        background: #f4f4f4;
+                        padding: 15px;
+                        width: 100%;
+                        margin: 10px 0;
+                        height: 40px;
+                    }
+
+                    label {
+                        display: flex;
+                        margin-left: 10px;
+                        font-size: 18px;
+                    }
+
+                    .box {
+                        padding: 20px;
+                        display: none;
+                        margin-top: 20px;
+                        background-color: #f0f0f0;
+                        border-radius: 5px;
+                    }
+
+                    @media (max-width: 768px) {
+                        .contact_form .row {
+                            flex-direction: column;
+                        }
+
+                        .contact_form .col-lg-6,
+                        .contact_form .col-sm-6 {
+                            width: 100%;
+                            margin-bottom: 20px;
+                        }
+                    }
+                </style>
+
+                <script>
+                    $(document).ready(function () {
+                        // Show corresponding health issue boxes
+                        $('input[name="healthissues"]').on('change', function () {
+                            $('.box').hide(); // Hide all boxes
+                            const selectedHealthIssue = $(this).val(); // Get selected value
+                            $('.' + selectedHealthIssue).show(); // Show the relevant box
+                        });
+                    });
+                </script>
+            </div>
+        </div>
+    </section>
+
+</body>
+
+</html>

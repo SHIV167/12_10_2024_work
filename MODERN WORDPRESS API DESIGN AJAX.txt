@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Blog Post Cards with Styled Pagination</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* Full-page loader styles */
+        #loader {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #loader img {
+            width: 100px;
+            /* Adjust the size of the loading image */
+            height: auto;
+        }
+
+        /* Hides the main content until fully loaded */
+        #content {
+            display: none;
+        }
+
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+            background-color: #f8f9fa;
+        }
+
+        /* Placeholder image loader */
+        .image-placeholder {
+            position: relative;
+        }
+
+        .image-placeholder img.card-img-top {
+            display: none;
+        }
+
+        .image-placeholder .image-loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+        }
+
+        /* Pagination loader */
+        #paginationLoader {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #paginationLoader img {
+            width: 50px;
+            height: 50px;
+        }
+
+        #pagination {
+            margin-top: 30px;
+        }
+
+        .pagination {
+            display: inline-flex;
+            padding: 0;
+            margin: 0;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .pagination li {
+            list-style: none;
+        }
+
+        .pagination li a {
+            text-decoration: none;
+            padding: 10px 20px;
+            color: #333;
+            font-weight: 500;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            transition: all 0.3s ease;
+        }
+
+        .pagination li.active a {
+            background-color: #007bff;
+            color: #fff;
+            border-color: #007bff;
+        }
+
+        .pagination li a:hover:not(.active) {
+            background-color: #f8f9fa;
+        }
+
+        .pagination li:first-child a {
+            border-top-left-radius: 30px;
+            border-bottom-left-radius: 30px;
+        }
+
+        .pagination li:last-child a {
+            border-top-right-radius: 30px;
+            border-bottom-right-radius: 30px;
+        }
+
+        .page-info {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Full-page image loader -->
+    <div id="loader">
+        <img src="spinner.gif" alt="Loading..."> <!-- Replace with your loader image URL -->
+    </div>
+
+    <!-- Hidden content until page load -->
+    <div id="content">
+        <div class="container mt-5">
+            <div class="row" id="blogPosts"></div>
+
+            <!-- Pagination loader -->
+            <div id="paginationLoader">
+                <img src="spinner.gif" alt="Loading...">
+                <!-- Replace with pagination loader image -->
+            </div>
+
+            <div id="pagination" class="d-flex flex-column align-items-center"></div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            // Hide loader and show content once page has fully loaded
+            $('#loader').fadeOut('slow', function () {
+                $('#content').fadeIn('slow');
+            });
+
+            const postsPerPage = 6;
+            let currentPage = 1;
+            let totalPages = 1;
+
+            function fetchPosts(page) {
+                const apiUrl = `https://webimpressions.online/wp-json/wp/v2/posts?order=desc&per_page=${postsPerPage}&page=${page}&_embed`;
+
+                // Show the pagination loader while fetching new posts
+                $('#paginationLoader').show();
+
+                $.ajax({
+                    url: apiUrl,
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function (posts, textStatus, request) {
+                        const $blogPostsContainer = $('#blogPosts');
+                        $blogPostsContainer.empty();
+
+                        totalPages = parseInt(request.getResponseHeader('X-WP-TotalPages')) || 1;
+
+                        $.each(posts, function (index, post) {
+                            const $postElement = $('<div>', {
+                                class: 'col-md-4 mb-4'
+                            });
+
+                            let imageUrl = 'https://via.placeholder.com/350x200'; // Default placeholder image
+                            if (post._embedded && post._embedded['wp:featuredmedia'] && post._embedded['wp:featuredmedia'][0].source_url) {
+                                imageUrl = post._embedded['wp:featuredmedia'][0].source_url;
+                            }
+
+                            $postElement.html(`
+                                <div class="card">
+                                    <div class="image-placeholder">
+                                        <img src="${imageUrl}" class="card-img-top" alt="Blog Image">
+                                        <img class="image-loader" src="spinner.gif" alt="Loading..."> <!-- Replace with loader image -->
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">${post.title.rendered}</h5>
+                                        <p class="card-text">${post.excerpt.rendered}</p>
+                                        <a href="${post.link}" class="btn btn-primary">Read More</a>
+                                    </div>
+                                </div>
+                            `);
+
+                            $blogPostsContainer.append($postElement);
+
+                            // Image placeholder loader with delay
+                            const $image = $postElement.find('img.card-img-top');
+                            const $imageLoader = $postElement.find('.image-loader');
+
+                            // Ensure the loader shows for at least 3 seconds
+                            setTimeout(function () {
+                                $image.on('load', function () {
+                                    $image.show();
+                                    $imageLoader.hide();
+                                });
+
+                                // If image loads before 3 seconds, delay hiding the loader
+                                $image.attr('src', imageUrl);
+                            }, 3000);
+                        });
+
+                        // Hide the pagination loader after posts are loaded
+                        $('#paginationLoader').hide();
+
+                        updatePagination();
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error fetching blog posts:', error);
+                        // Hide the pagination loader even if there's an error
+                        $('#paginationLoader').hide();
+                    }
+                });
+            }
+
+            function updatePagination() {
+                const $pagination = $('#pagination');
+                $pagination.empty();
+
+                if (totalPages > 1) {
+                    const $ul = $('<ul>', { class: 'pagination' });
+
+                    // Previous button
+                    $ul.append(
+                        $('<li>', { class: currentPage === 1 ? 'disabled' : '' }).append(
+                            $('<a>', {
+                                href: '#',
+                                text: '«',
+                                click: function (e) {
+                                    e.preventDefault();
+                                    if (currentPage > 1) {
+                                        currentPage--;
+                                        fetchPosts(currentPage);
+                                    }
+                                }
+                            })
+                        )
+                    );
+
+                    // Page numbers
+                    for (let i = 1; i <= totalPages; i++) {
+                        $ul.append(
+                            $('<li>', { class: currentPage === i ? 'active' : '' }).append(
+                                $('<a>', {
+                                    href: '#',
+                                    text: i,
+                                    click: function (e) {
+                                        e.preventDefault();
+                                        currentPage = i;
+                                        fetchPosts(currentPage);
+                                    }
+                                })
+                            )
+                        );
+                    }
+
+                    // Next button
+                    $ul.append(
+                        $('<li>', { class: currentPage === totalPages ? 'disabled' : '' }).append(
+                            $('<a>', {
+                                href: '#',
+                                text: '»',
+                                click: function (e) {
+                                    e.preventDefault();
+                                    if (currentPage < totalPages) {
+                                        currentPage++;
+                                        fetchPosts(currentPage);
+                                    }
+                                }
+                            })
+                        )
+                    );
+
+                    $pagination.append($ul);
+                    $pagination.append($('<div>', {
+                        class: 'page-info',
+                        text: `Page ${currentPage} of ${totalPages}`
+                    }));
+                }
+            }
+
+            // Initial fetch
+            fetchPosts(currentPage);
+        });
+    </script>
+</body>
+
+</html>

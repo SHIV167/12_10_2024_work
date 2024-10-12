@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="assets/css/styles.css">
+        <script src="assets/js/jquery.min.js"></script>
+    </head>
+    <body class="main">
+     <div class="containerblog">
+      <div class="cardcontainer">
+        <div class="image">
+        <img src="./assets/image/blog_image-1712571087751-440436903.jpg" alt="test1"/>
+    </div>
+    <div class="details">
+    <p>date goes here</p>
+    <h3>Heading goes here</h3>
+    <p><a href="#"><span>Read More</span></a></p>
+    </div>
+    
+    </div>
+        <div class="cardcontainer">
+            <div class="image">
+                <img src="./assets/image/blog_image-1712571087751-440436903.jpg" alt="test1" />
+            </div>
+            <div class="details">
+                <p>date goes here</p>
+                <h3>this is heading of blog</h3>
+                <p><a href="#"><span>Read More</span></a></p>
+            </div>
+        
+        </div>
+            <div class="cardcontainer">
+                <div class="image">
+                    <img src="./assets/image/blog_image-1712571087751-440436903.jpg" alt="test1" />
+                </div>
+                <div class="details">
+                    <p>date goes here</p>
+                    <h3>this is heading of blog</h3>
+                    <p><a href="#"><span>Read More</span></a></p>
+                </div>
+            
+            </div>
+                <div class="cardcontainer">
+                    <div class="image">
+                        <img src="./assets/image/blog_image-1712571087751-440436903.jpg" alt="test1" />
+                    </div>
+                    <div class="details">
+                        <p>Date goes here</p>
+                        <h3>this is heading of blog</h3>
+                        <p><a href="#"><span>Read More</span></a></p>
+                    </div>
+                
+                </div>
+</div>  
+     
+       
+        <script src="assets/js/javascript.js" async defer></script>
+    </body>
+</html>
+
+
+
+======================================================GRID CSS ================================================================================
+
+
+.containerblog {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.cardcontainer {
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.image {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+}
+
+.image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.details {
+    padding: 15px;
+}
+
+/* Responsive layout */
+@media screen and (max-width: 992px) {
+    .containerblog {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .containerblog {
+        grid-template-columns: 1fr;
+    }
+}
+

@@ -1,0 +1,100 @@
+{% if option.name == 'Size' %}
+    {% when 'button' %}
+      {% if forloop.first %}
+        {% for variant in product.variants %}
+          <label
+            for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}"
+            class="cmvariant variant__button-label custom-variant--wrapper {% if variant.selected %}selected{% endif %}"
+          >
+            <div class="variant--wrapper">
+              {{ variant.title }}
+              <div class="product-price">
+                <span class="price">{{ variant.price | money }}</span>
+                {% if variant.compare_at_price > variant.price %}
+                  <span class="compare-price">{{ variant.compare_at_price | money }}</span>
+                {% endif %}
+              </div>
+            </div>
+            {% if variant.compare_at_price > variant.price %}
+              <span class="discount-price">
+                <span class="discount_price"> Save {{ variant.compare_at_price | minus: variant.price | money }} </span>
+              </span>
+            {% endif %}
+          </label>
+        {% endfor %}
+      {% endif %}
+{% else %}
+
+{% if product.variants[forloop.index0].metafield.custom.test != blank and option.name == 'Color' %}
+<label
+    class="swimg"
+    for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}"
+    style="background-color:{{ product.variants[forloop.index0].metafield.custom.test}};"
+  ></label>
+{% endif %}
+
+<label class="cmvariant"for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}"></label>
+{{ value -}}<span class="visually-hidden">{{ 'products.product.variant_sold_out_or_unavailable' | t}}</span>
+{% endif %}
+
+
+=====================================================CSS===============================================================
+
+
+.custom-variant--wrapper {
+  position: relative;
+  border-radius: 10px;
+  padding: 15px;
+  border: 2px solid #5dc23c;
+  margin-bottom: 20px;
+  width: 100%;
+  box-shadow: none;
+  overflow: visible;
+}
+
+.custom-variant--wrapper .variant--wrapper {
+  padding: 15px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.custom-variant--wrapper .price {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 700;
+  color: #333;
+}
+
+.custom-variant--wrapper .compare-price {
+  font-size: 13px;
+  line-height: 20px;
+  text-decoration: line-through;
+  font-weight: 500;
+  color: #999;
+}
+
+.custom-variant--wrapper .discount-price {
+  position: absolute;
+  top: -10px;
+  left: 15px;
+  background: #fff;
+  color: #e7510b;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 0 5px;
+  white-space: nowrap;
+}
+
+.custom-variant--wrapper input[type=radio]:checked + label {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  border: 2px solid #ec6602;
+}
+
+/* Add hover effects for better UI feedback */
+.custom-variant--wrapper:hover {
+  border-color: #ec6602;
+}
+
+ 
+

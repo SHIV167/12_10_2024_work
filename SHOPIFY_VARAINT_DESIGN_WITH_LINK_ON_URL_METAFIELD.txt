@@ -1,0 +1,137 @@
+{% comment %}
+  Renders product variant options
+  Accepts:
+  - product: {Object} Product object
+  - option: {Object} Current product option object
+  - block: {Object} Block object
+  - picker_type: {String} Type of picker to display ('swatch', 'button', 'dropdown', 'swatch_dropdown')
+{% endcomment %}
+
+{%- liquid
+  assign product_form_id = 'product-form-' | append: section.id
+-%}
+
+{%- for value in option.values -%}
+  {%- liquid
+    assign option_disabled = true
+    if value.available
+      assign option_disabled = false
+    endif
+  -%}
+
+  {%- capture input_id -%}
+    {{ section.id }}-{{ option.position }}-{{ forloop.index0 }}
+  {%- endcapture -%}
+
+  {%- capture input_dataset -%}
+    data-product-url="{{ value.product_url }}"
+    data-option-value-id="{{ value.id }}"
+  {%- endcapture -%}
+
+  {% case picker_type %}
+    {% when 'button' %}
+      {% if option.name == 'Size' %}
+        {% if forloop.first %}
+          {% for variant in product.variants %}
+            {% assign variant_link = variant.metafields.namespace.link %}
+            <!-- Replace 'namespace' with your actual namespace -->
+            <a
+              href="{{ variant.metafields.custom.link }}"
+              class="variant__button-label custom-variant--wrapper"
+              id="ProductSelect-{{ product.id }}-{{ variant.id }}"
+            >
+              <div class="variant--wrapper">
+                {{ variant.title }}
+                <div class="product-price">
+                  <span class="price">{{ variant.price | money }}</span>
+                  {% if variant.compare_at_price > variant.price %}
+                    <span class="compare-price">{{ variant.compare_at_price | money }}</span>
+                  {% endif %}
+                </div>
+              </div>
+              {% if variant.compare_at_price > variant.price %}
+                <span class="discount-price">
+                  <span class="discount_price">
+                    Save {{ variant.compare_at_price | minus: variant.price | money }}
+                  </span>
+                </span>
+              {% endif %}
+            </a>
+          {% endfor %}
+        {% endif %}
+      {% endif %}
+      {% if option.name == 'Color' %}
+        <label
+          class="swimg"
+          for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}"
+          style="background-color:red"
+          >BLACK</label
+        >
+      {% endif %}
+    {% when 'dropdown' %}
+      <option
+        value="{{ value | escape }}"
+        {% if value.selected %}
+          selected="selected"
+        {% endif %}
+        {{ input_dataset }}
+      >
+        {% if option_disabled %}
+          {{- 'products.product.value_unavailable' | t: option_value: value -}}
+        {% else %}
+          {{- value -}}
+        {% endif %}
+      </option>
+  {% endcase %}
+{%- endfor -%}
+
+
+.variant__button-label {
+    display: inline-block; /* Make anchor behave like a button */
+    padding: 10px 15px; /* Space inside the button */
+    background-color: transparent; /* Transparent background */
+    color: black; /* Text color */
+    border: 2px solid green; /* Border color and thickness */
+    border-radius: 5px; /* Rounded corners */
+    text-decoration: none; /* Remove underline */
+    font-size: 16px; /* Font size */
+    margin: 5px; /* Space between buttons */
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+.variant__button-label:hover {
+    background-color: green; /* Background color on hover */
+    color: white; /* Text color on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+    text-underline: none;
+}
+
+.variant__button-label:active {
+    background-color: #0056b3; /* Darker shade when active */
+    transform: translateY(0); /* Reset lift effect */
+}
+
+.variant--wrapper {
+    display: flex; /* Align items in a row */
+    flex-direction: column; /* Stack title and price */
+    align-items: flex-start; /* Align text to the left */
+}
+
+.product-price {
+    margin-top: 5px; /* Space between title and price */
+}
+
+.price {
+    font-weight: bold; /* Highlight price */
+}
+
+.compare-price {
+    text-decoration: line-through; /* Strikethrough for original price */
+    color: #999; /* Gray color for compare price */
+}
+
+.discount-price {
+    color: #d9534f; /* Red color for discount text */
+    font-weight: bold; /* Bold discount text */
+}

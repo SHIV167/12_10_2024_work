@@ -1,0 +1,83 @@
+<style>
+  .product-form__input .pack_card .content {
+    padding: 15px;
+    background-color: #e8f5e9; /* Soft green */
+    border-bottom: 1px solid #ddd;
+  }
+
+  .pack_card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    cursor: pointer;
+    background-color: #e8f5e9; /* Soft green */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .pack_card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    background-color: #2e7d32; /* Dark green on hover */
+    color: white; /* Text color changes to white on hover */
+  }
+
+  .pack_heading {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .recom_course {
+    font-size: 15px;
+    color: #555;
+    padding: 10px 15px;
+    background-color: #f1f1f1;
+  }
+
+  .recom_note {
+    font-size: 14px;
+    color: #ff4500;
+    font-weight: bold;
+    text-align: center;
+    padding: 8px;
+    background-color: #fff5e6;
+    border-top: 1px solid #ddd;
+  }
+
+  /* Radio buttons hidden but accessible */
+  input[type="radio"] {
+    display: none;
+  }
+
+  input[type="radio"]:checked + .pack_card {
+    border-color: #1b5e20; /* Dark green when selected */
+    background-color: #1b5e20; /* Dark green on selected */
+    color: white; /* Text turns white when selected */
+    box-shadow: 0 4px 8px rgba(27, 94, 32, 0.2); /* Shadow for the selected state */
+  }
+</style>
+
+{% assign variant_ids = '' %}
+
+{% for variant in product.variants %}
+  {% unless variant_ids contains variant.id %}
+    <label for="variant-{{ variant.id }}" class="cmvariant">
+      <input type="radio" name="id" value="{{ variant.id }}" id="variant-{{ variant.id }}">
+      <div class="pack_card">
+        <div class="content">
+          <span class="pack_heading">{{ variant.title }}</span>
+        </div>
+        <div class="recom_course">{{ variant.metafields.custom.capsule_count }} Capsules</div>
+
+        {% if variant.metafields.custom.is_best_seller %}
+          <div class="recom_note">BEST SELLER</div>
+        {% elsif variant.metafields.custom.is_experts_recommended %}
+          <div class="recom_note">EXPERTS RECOMMENDED</div>
+        {% endif %}
+      </div>
+    </label>
+    {% assign variant_ids = variant_ids | append: variant.id %}
+  {% endunless %}
+{% endfor %}
