@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootstrap Plan Cards</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        .comman-btn1 {
+            border-radius: 5px;
+            min-width: 180px;
+            background: #02043e;
+            font-size: 20px;
+            color: #fff;
+        }
+
+        .comman-btn {
+            display: inline-flex;
+            justify-content: center;
+            padding: 8px 16px;
+            margin: 4px 0;
+            position: relative;
+            overflow: hidden;
+            line-height: normal;
+            border: none;
+            font-size: 20px;
+            align-items: center;
+            font-weight: 800;
+            color: #FFF;
+            border-radius: 3px;
+            min-height: 60px;
+            min-width: 180px;
+            background: linear-gradient(135deg, #1722cd 0%, #3559ff 100%);
+            transition: box-shadow 0.15s ease 0s, transform 0.15s ease 0s;
+            box-shadow: rgb(33 30 76 / 40%) 0px 2px 4px, rgb(20 16 87 / 30%) 0px 7px 13px -3px, rgb(21 21 131 / 50%) 0px -3px 0px inset;
+        }
+
+        .card {
+            border-top: 10px solid #7c7fe1;
+        }
+
+        .card-header {
+            padding: 1.5rem;
+            border-radius: 0.25rem 0.25rem 0 0;
+        }
+
+        .pl-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .small {
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .priceDetail h4 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .list-unstyled li {
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            position: relative;
+        }
+
+        .list-unstyled li i {
+            margin-right: 0.5rem;
+        }
+
+        .fa-circle-check {
+            color: green;
+        }
+
+        .fa-circle-xmark {
+            color: red;
+        }
+
+        .tooltip-details {
+            display: none;
+            position: absolute;
+            bottom: -35px;
+            left: 0;
+            background-color: #fff;
+            padding: 10px;
+            width: 250px;
+            border-radius: 0.25rem;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+
+        .toolpoint:hover .tooltip-details {
+            display: block;
+        }
+
+        .tooltip-details p {
+            margin: 0;
+            font-size: 0.875rem;
+        }
+
+        .tooltip-details a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .tooltip-details a:hover {
+            text-decoration: underline;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            padding: 0.60rem 0.50rem;
+            font-size: 1rem;
+            border-radius: 5px;
+            min-width: 180px;
+            transition: box-shadow 0.15s ease 0s, transform 0.15s ease 0s;
+            box-shadow: rgb(33 30 76 / 40%) 0px 2px 4px, rgb(20 16 87 / 30%) 0px 7px 13px -3px, rgb(21 21 131 / 50%) 0px -3px 0px inset;
+        }
+
+        .btn-primary:hover {
+            background-color: darkgray;
+        }
+
+        .btn-secondary {
+            background-color: darkgray;
+            cursor: not-allowed;
+        }
+
+        .renewalprice h5 {
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .renewalprice ul {
+            padding-left: 0;
+            list-style: none;
+            margin-top: 0.5rem;
+        }
+
+        .renewalprice ul li {
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .renewalprice ul li i {
+            margin-right: 0.5rem;
+            color: green;
+        }
+
+        .font12 {
+            font-size: 12px;
+        }
+
+        .reds {
+            color: red;
+        }
+
+        .save-price {
+            background: #22218b;
+            padding: 8px 22px;
+            border-radius: 0;
+            font-size: 14px;
+            line-height: normal;
+            color: #fff;
+            font-weight: 700;
+            clip-path: polygon(0 0, 100% 0, calc(100% - .875rem) 50%, 100% 100%, 0 100%, .875rem 50%);
+        }
+              .card {
+            transition: transform 0.3s, border 0.3s;
+        }
+
+        .selected {
+            transform: scale(1.05);
+            border: 10px 2px 2px 2px solid #007bff; /* Highlight color */
+        }
+        .plan-sect-art {
+    background-image: url('/12_10_2024/techno-hexagonal.svg');
+    background-attachment: fixed;
+    background-size: cover;
+    border-radius: 20px;
+    background-repeat: repeat-x;
+}
+    </style>
+</head>
+
+<body>
+    <div class="plan-sect-art container mt-5">
+        <article class="section-heading text-center mb-2">
+            <h2 id="best-wordpress-hosting-plans" class="section-title">
+                Choose the Ideal Plan For <span class="wrap_title"> your WordPress site <a class="anchor-hash"
+                        href="#best-wordpress-hosting-plans" title="Best WordPress Hosting Plans"><i
+                            class="bi bi-link-45deg"></i></a></span>
+            </h2>
+            <p class="section-subtitle">Premium Features with Transparent WordPress Hosting Charges!</p>
+        </article><br><br><br><br>
+        <div class="row">
+
+            <!-- Plan Card 1 -->
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header text-center">
+                        <h3 class="pl-name mb-1">WordPress <br> Basic ++</h3>
+                        <p class="small">Perfect For Basic WordPress Websites</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="monthly priceDetail">
+                            <div class="text-center">
+                                <p class="save-price d-inline-block mb-2">6 Months of Free Hosting</p>
+                            </div>
+                            <div class="text-center">
+                                <h4>$2.75/mo</h4>
+                            </div>
+                        </div>
+                        <ul class="list-unstyled mb-3">
+                            <li><i class="fa-solid fa-circle-check font12"></i> 1 Website</li>
+                            <li><i class="fa-solid fa-circle-check font12"></i> 10 GB SSD Storage</li>
+                            <li><i class="fa-solid fa-circle-check font12"></i> 100 GB Bandwidth</li>
+                            <li><i class="fa-solid fa-circle-check font12"></i> 1 GB RAM</li>
+                            <li><i class="fa-solid fa-circle-check font12"></i> 1 vCPU</li>
+                            <li><i class="fa-solid fa-circle-check font12"></i> 5 MySQL Databases</li>
+                            <li><i class="fa-solid fa-circle-check font12"></i> cPanel control panel</li>
+                            <li class="position-relative"><i class="fa-solid fa-circle-check font12"></i> 5 Free Email
+                                Accounts
+                                <span class="toolpoint"><i class="bi bi-info-circle"
+                                        style="font-size:12px;position:relative;"></i>
+                                    <div class="tooltip-details">
+                                        <p>Create up to 5 domain-based email accounts with cPanel features, such as auto
+                                            responders, email routing, forwarders, and much more.</p>
+                                    </div>
+                                </span>
+                            </li>
+                            <li><i class="fa-solid fa-circle-check font12"></i> Free SSL</li>
+                            <li class="position-relative"><i class="fa-regular fa-circle-xmark font12 reds"></i> CDN
+                                <span style="color:#000;">(Add-on)</span>
+                                <span class="toolpoint"><i class="bi bi-info-circle"
+                                        style="font-size:12px;position:relative;"></i>
+                                    <div class="tooltip-details">
+                                        <p>Experience the fastest content delivery using our <a
+                                                href="https://www.accuwebhosting.com/web-services/cdn-hosting">CDN.</a>
+                                            This service is available as an Add-on for just $1.50/month!</p>
+                                    </div>
+                                </span>
+                            </li>
+                        </ul>
+                        <div class="renewalprice">
+                            <h5>Renewal Price: <span class="font-weight-bold">$7.99/mo</span></h5>
+                            <ul>
+                                <li><i class="fa-solid fa-circle-check"></i> No Contracts</li>
+                                <li><i class="fa-solid fa-circle-check"></i> 30-Day Money Back Guarantee</li>
+                            </ul>
+                        </div>
+                        <div class="toolpoint renewal-pricebox mt-3" style="font-size: 1rem;">
+                            Renewal Price<i class="bi bi-info-circle-fill ms-1 font14"></i>
+                            <div class="tooltip-details renewalprice _rInfo" data-id="basics">
+                                <h5 class="heading-six">Promotional Pricing Disclaimer</h5>
+                                <p class="p18-comman">At the end of the purchased term, the
+                                    price renews at the then-current rate. The current rates
+                                    are...</p>
+                                <ul class="tooltip-ul">
+                                    <li><i class="fas fa-check font14"></i><span>Monthly - $2.75
+                                            USD</span></li>
+                                    <li><i class="fas fa-check font14"></i><span>Annually -
+                                            $33.00 USD</span></li>
+                                    <li><i class="fas fa-check font14"></i><span>Triennially -
+                                            $99.00 USD</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="d-grid">
+                            <a class="btn btn-primary" href="#">Add To Cart <i
+                                    class="fas fa-arrow-right but-arrow"></i></a>
+                            <a class="btn btn-secondary" href="#">Order Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Plan Card 2 -->
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm selected">
+                <div class="card-header text-center">
+                    <h3 class="pl-name mb-1">WordPress <br> Basic ++</h3>
+                    <p class="small">Perfect For Basic WordPress Websites</p>
+                </div>
+                <div class="card-body">
+                    <div class="monthly priceDetail">
+                        <div class="text-center">
+                            <p class="save-price d-inline-block mb-2">6 Months of Free Hosting</p>
+                        </div>
+                        <div class="text-center">
+                            <h4>$2.75/mo</h4>
+                        </div>
+                    </div>
+                    <ul class="list-unstyled mb-3">
+                        <li><i class="fa-solid fa-circle-check font12"></i> 1 Website</li>
+                        <li><i class="fa-solid fa-circle-check font12"></i> 10 GB SSD Storage</li>
+                        <li><i class="fa-solid fa-circle-check font12"></i> 100 GB Bandwidth</li>
+                        <li><i class="fa-solid fa-circle-check font12"></i> 1 GB RAM</li>
+                        <li><i class="fa-solid fa-circle-check font12"></i> 1 vCPU</li>
+                        <li><i class="fa-solid fa-circle-check font12"></i> 5 MySQL Databases</li>
+                        <li><i class="fa-solid fa-circle-check font12"></i> cPanel control panel</li>
+                        <li class="position-relative"><i class="fa-solid fa-circle-check font12"></i> 5 Free Email
+                            Accounts
+                            <span class="toolpoint"><i class="bi bi-info-circle" style="font-size:12px;position:relative;"></i>
+                                <div class="tooltip-details">
+                                    <p>Create up to 5 domain-based email accounts with cPanel features, such as auto
+                                        responders, email routing, forwarders, and much more.</p>
+                                </div>
+                            </span>
+                        </li>
+                        <li><i class="fa-solid fa-circle-check font12"></i> Free SSL</li>
+                        <li class="position-relative"><i class="fa-regular fa-circle-xmark font12 reds"></i> CDN
+                            <span style="color:#000;">(Add-on)</span>
+                            <span class="toolpoint"><i class="bi bi-info-circle" style="font-size:12px;position:relative;"></i>
+                                <div class="tooltip-details">
+                                    <p>Experience the fastest content delivery using our <a
+                                            href="https://www.accuwebhosting.com/web-services/cdn-hosting">CDN.</a>
+                                        This service is available as an Add-on for just $1.50/month!</p>
+                                </div>
+                            </span>
+                        </li>
+                    </ul>
+                    <div class="renewalprice">
+                        <h5>Renewal Price: <span class="font-weight-bold">$7.99/mo</span></h5>
+                        <ul>
+                            <li><i class="fa-solid fa-circle-check"></i> No Contracts</li>
+                            <li><i class="fa-solid fa-circle-check"></i> 30-Day Money Back Guarantee</li>
+                        </ul>
+                    </div>
+                    <div class="toolpoint renewal-pricebox mt-3" style="font-size: 1rem;">
+                        Renewal Price<i class="bi bi-info-circle-fill ms-1 font14"></i>
+                        <div class="tooltip-details renewalprice _rInfo" data-id="basics">
+                            <h5 class="heading-six">Promotional Pricing Disclaimer</h5>
+                            <p class="p18-comman">At the end of the purchased term, the
+                                price renews at the then-current rate. The current rates
+                                are...</p>
+                            <ul class="tooltip-ul">
+                                <li><i class="fas fa-check font14"></i><span>Monthly - $2.75
+                                        USD</span></li>
+                                <li><i class="fas fa-check font14"></i><span>Annually -
+                                        $33.00 USD</span></li>
+                                <li><i class="fas fa-check font14"></i><span>Triennially -
+                                        $99.00 USD</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="d-grid">
+                        <a class="btn btn-primary" href="#">Add To Cart <i class="fas fa-arrow-right but-arrow"></i></a>
+                        <a class="btn btn-secondary" href="#">Order Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header text-center">
+                    <h3 class="pl-name mb-1">WordPress <br> Basic ++</h3>
+                    <p class="small">Perfect For Basic WordPress Websites</p>
+                </div>
+                <div class="card-body">
+                    <div class="monthly priceDetail">
+                        <div class="text-center">
+                            <p class="save-price d-inline-block mb-2">6 Months of Free Hosting</p>
+                        </div>
+                        <div class="text-center">
+                            <h4>$2.75/mo</h4>
+                        </div>
+                    </div>
+                    <ul class="list-unstyled mb-3">
+                        <li><i class="fa-solid fa-circle-check font12"></i> 1 Website</li>
+                        <li><i class="fa-solid fa-circle-check font12"></i> 10 GB SSD Storage</li>
+                        <li><i class="fa-solid fa-circle-check font12"></i> 100 GB Bandwidth</li>
+                        <li><i class="fa-solid fa-circle-check font12"></i> 1 GB RAM</li>
+                        <li><i class="fa-solid fa-circle-check font12"></i> 1 vCPU</li>
+                        <li><i class="fa-solid fa-circle-check font12"></i> 5 MySQL Databases</li>
+                        <li><i class="fa-solid fa-circle-check font12"></i> cPanel control panel</li>
+                        <li class="position-relative"><i class="fa-solid fa-circle-check font12"></i> 5 Free Email
+                            Accounts
+                            <span class="toolpoint"><i class="bi bi-info-circle" style="font-size:12px;position:relative;"></i>
+                                <div class="tooltip-details">
+                                    <p>Create up to 5 domain-based email accounts with cPanel features, such as auto
+                                        responders, email routing, forwarders, and much more.</p>
+                                </div>
+                            </span>
+                        </li>
+                        <li><i class="fa-solid fa-circle-check font12"></i> Free SSL</li>
+                        <li class="position-relative"><i class="fa-regular fa-circle-xmark font12 reds"></i> CDN
+                            <span style="color:#000;">(Add-on)</span>
+                            <span class="toolpoint"><i class="bi bi-info-circle" style="font-size:12px;position:relative;"></i>
+                                <div class="tooltip-details">
+                                    <p>Experience the fastest content delivery using our <a
+                                            href="https://www.accuwebhosting.com/web-services/cdn-hosting">CDN.</a>
+                                        This service is available as an Add-on for just $1.50/month!</p>
+                                </div>
+                            </span>
+                        </li>
+                    </ul>
+                    <div class="renewalprice">
+                        <h5>Renewal Price: <span class="font-weight-bold">$7.99/mo</span></h5>
+                        <ul>
+                            <li><i class="fa-solid fa-circle-check"></i> No Contracts</li>
+                            <li><i class="fa-solid fa-circle-check"></i> 30-Day Money Back Guarantee</li>
+                        </ul>
+                    </div>
+                    <div class="toolpoint renewal-pricebox mt-3" style="font-size: 1rem;">
+                        Renewal Price<i class="bi bi-info-circle-fill ms-1 font14"></i>
+                        <div class="tooltip-details renewalprice _rInfo" data-id="basics">
+                            <h5 class="heading-six">Promotional Pricing Disclaimer</h5>
+                            <p class="p18-comman">At the end of the purchased term, the
+                                price renews at the then-current rate. The current rates
+                                are...</p>
+                            <ul class="tooltip-ul">
+                                <li><i class="fas fa-check font14"></i><span>Monthly - $2.75
+                                        USD</span></li>
+                                <li><i class="fas fa-check font14"></i><span>Annually -
+                                        $33.00 USD</span></li>
+                                <li><i class="fas fa-check font14"></i><span>Triennially -
+                                        $99.00 USD</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="d-grid">
+                        <a class="btn btn-primary" href="#">Add To Cart <i class="fas fa-arrow-right but-arrow"></i></a>
+                        <a class="btn btn-secondary" href="#">Order Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+<br><br>
+        <div class="text-center mt-0">
+            <a href="/web-hosting/wordpress/features-comparison" target="_blank" class="comman-btn comman-btn1"
+                title="View More Features">View More Features<i class="fas fa-arrow-right but-arrow"></i></a>
+        </div>
+        <br><br>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
